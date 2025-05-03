@@ -10,6 +10,7 @@ import Profile from "./components/Profile";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/signup" element={<Signup />} />
 					<Route path="/login" element={<Login />} />
+					<Route path="/product/:id" element={<ProductDetails />} />
 
 					{/* Protected routes */}
 					<Route
