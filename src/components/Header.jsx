@@ -1,28 +1,30 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../contexts/CartContext.jsx";
 import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";
 import { BsBag } from "react-icons/bs";
 import { CiUser } from "react-icons/ci";
-import { useAuth } from "../contexts/AuthContext"; // Import the auth context
+import { useAuth } from "../contexts/AuthContext";
 
 const Header = () => {
 	// header state
 	const [isActive, setIsActive] = useState(false);
 	const { itemAmount } = useContext(CartContext);
-	const { currentUser, logout } = useAuth(); // Add authentication context
-	const navigate = useNavigate(); // Add navigation hook
+	const { currentUser, logout } = useAuth();
+	const navigate = useNavigate();
 
 	// currency state
-	const { currency } = useContext(CurrencyContext);
+	const { currency, setCurrency } = useContext(CurrencyContext);
 
 	// event listener
 	useEffect(() => {
-		window.addEventListener("scroll", () => {
+		const handleScroll = () => {
 			window.scrollY > 60 ? setIsActive(true) : setIsActive(false);
-		});
-	});
+		};
+		window.addEventListener("scroll", handleScroll);
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
 
 	// Handle user icon click - show dropdown or navigate to login
 	const [showUserMenu, setShowUserMenu] = useState(false);
@@ -46,6 +48,11 @@ const Header = () => {
 		}
 	};
 
+	// Handle currency change
+	const handleCurrencyChange = (e) => {
+		setCurrency(e.target.value);
+	};
+
 	return (
 		<header
 			className={`${
@@ -55,7 +62,7 @@ const Header = () => {
 			<div className="container mx-auto flex items-center justify-between h-full">
 				<Link to={"/"}>
 					<div className="flex items-center">
-						<img src={Logo} alt="" className="w-[40px]" />
+						<img src={Logo} alt="Urban Loom Logo" className="w-[40px]" />
 						<span className="ms-4">Urban Loom</span>
 					</div>
 				</Link>
@@ -64,7 +71,7 @@ const Header = () => {
 					{/* currency select */}
 					<select
 						value={currency}
-						onChange={() => {}}
+						onChange={handleCurrencyChange}
 						className="border border-slate-800 rounded-md px-3 py-2 focus:outline-none text-slate-800 text-sm"
 						aria-label="Select currency"
 					>
@@ -74,17 +81,19 @@ const Header = () => {
 					</select>
 
 					{/* cart */}
-					<div
-						onClick={() => {}}
+					<Link
+						to="/cart"
 						className="cart-btn cursor-pointer flex relative"
 						role="button"
 						aria-label="cart"
 					>
 						<BsBag className="text-2xl" />
-						<div className="bg-slate-800 absolute -right-2 -bottom-2 text-[12px] w-[18px] h-[18px] text-white rounded-full flex justify-center items-center">
-							{itemAmount}
-						</div>
-					</div>
+						{itemAmount > 0 && (
+							<div className="bg-slate-800 absolute -right-2 -bottom-2 text-[12px] w-[18px] h-[18px] text-white rounded-full flex justify-center items-center">
+								{itemAmount}
+							</div>
+						)}
+					</Link>
 
 					{/* user */}
 					<div

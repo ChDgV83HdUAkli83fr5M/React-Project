@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -14,25 +14,29 @@ import Footer from "./components/Footer";
 function App() {
 	return (
 		<AuthProvider>
-			<div className="overflow-hidden">
+			<div className="flex flex-col min-h-screen">
 				<Header />
-				<Routes>
-					{/* Public routes */}
-					<Route path="/" element={<Home />} />
-					<Route path="/signup" element={<Signup />} />
-					<Route path="/login" element={<Login />} />
+				<div className="flex flex-1">
+					<Sidebar />
+					<main className="flex-1 p-4">
+						<Routes>
+							{/* Public routes */}
+							<Route path="/" element={<Home />} />
+							<Route path="/signup" element={<Signup />} />
+							<Route path="/login" element={<Login />} />
 
-					{/* Protected routes */}
-					<Route
-						path="/profile"
-						element={
-							<PrivateRoute>
-								<Profile />
-							</PrivateRoute>
-						}
-					/>
-				</Routes>
-				<Sidebar />
+							{/* Protected routes */}
+							<Route
+								path="/profile"
+								element={
+									<PrivateRoute>
+										<Profile />
+									</PrivateRoute>
+								}
+							/>
+						</Routes>
+					</main>
+				</div>
 				<Footer />
 			</div>
 		</AuthProvider>
