@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 import { BsPlus, BsEyeFill } from "react-icons/bs";
 
@@ -9,8 +9,12 @@ const Product = ({ product }) => {
 	const { addToCart } = useContext(CartContext);
 	const { id, image, category, title, price } = product;
 
+	const handleImageError = (e) => {
+		e.target.src = 'https://via.placeholder.com/200x200?text=No+Image';
+	};
+
 	return (
-		<div>
+		<div className="product-card">
 			<div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition rounded-xl">
 				<div className="w-full h-full flex justify-center items-center">
 					{/* image */}
@@ -18,7 +22,8 @@ const Product = ({ product }) => {
 						<img
 							className="max-h-[160px] group-hover:scale-110 transition duration-300"
 							src={image}
-							alt=""
+							alt={title}
+							onError={handleImageError}
 						/>
 					</div>
 				</div>
@@ -39,12 +44,11 @@ const Product = ({ product }) => {
 			</div>
 			{/* category, title & price */}
 			<div>
-				<div className="tex-sm capitalize text-gray-500 mb-1">{category}</div>
+				<div className="text-sm capitalize text-gray-500 mb-1">{category}</div>
 				<Link to={`/product/${id}`}>
 					<h2 className="font-semibold mb-1">{title}</h2>
 				</Link>
-
-				<h2 className="font-semibbold">$ {price}</h2>
+				<h2 className="font-semibold">$ {price}</h2>
 			</div>
 		</div>
 	);
